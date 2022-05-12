@@ -55,7 +55,7 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:3000",
-      "https://daybits-frontend.vercel.app/daybits", //NEED TO CHANGE URL
+      //"https://daybits-frontend.vercel.app/daybits", //NEED TO CHANGE URL
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
