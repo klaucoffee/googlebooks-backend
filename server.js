@@ -68,7 +68,7 @@ app.use(express.json());
 // app.use("/daybits/comments", CommentsController);
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("Hello WORLDDD");
 });
 
 app.listen(PORT, () => {
