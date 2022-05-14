@@ -16,6 +16,7 @@ const session = require("express-session");
 const app = express();
 const PORT = process.env.PORT; // 2000;
 const MONGODB_URI = process.env.MONGODB_URI; // "mongodb://localhost:27017/googlebooks";
+//mongodb+srv://klau1:Peanut123@cluster0.xdqfk.mongodb.net/googlebooks
 
 // Error / Disconnection
 mongoose.connection.on("error", (err) =>
