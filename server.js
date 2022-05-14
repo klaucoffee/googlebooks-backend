@@ -90,7 +90,7 @@ const verifyToken = (req, res, next) => {
 };
 
 app.get("/", (req, res) => {
-  res.send("Hello WORLDDD");
+  res.send("Hello WORLDDD 2");
 });
 
 app.post("/login", (req, res) => {
