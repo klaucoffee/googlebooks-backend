@@ -32,6 +32,7 @@ mongoose.connection.once("open", () => {
 
 //****************MIDDLEWARES***************//
 app.set("trust proxy", 1); // add this line
+app.use(express.static("public")); //overwrites the path - access the public folder (works for static html file)
 app.use(
   session({
     secret: process.env.SECRET,
@@ -72,8 +73,10 @@ app.use(express.json());
 
 const verifyToken = (req, res, next) => {
   //MIDDLEWARE to verify token
+  console.log("COOKIE", req.headers.Cookie);
   try {
-    const authToken = req.headers.token;
+    const authToken = req.headers.token; //token is now in header. Token is the cookie value
+    //const authToken = req.headers.Cookie;
 
     // validate the token
     const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
@@ -95,6 +98,7 @@ app.get("/", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body; //postman Body
+  console.log("body", req.body);
 
   if (users[username].password === password) {
     //authenticate and create the jwt
@@ -109,7 +113,7 @@ app.post("/login", (req, res) => {
     res
       .status(200)
       .cookie("NewCookie", newToken, { path: "/", httpOnly: true })
-      .send("cookie");
+      .send("log in successful - cookie");
   } else {
     res.status(403).send("unauthorised");
   }
@@ -118,6 +122,7 @@ app.post("/login", (req, res) => {
 app.post("/posts", verifyToken, (req, res) => {
   //verifyToken used here
   const username = req.user;
+
   const userTransactions = transactions[username];
   res.status(200).json({ transactions: userTransactions });
 });
