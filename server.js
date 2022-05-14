@@ -2,6 +2,9 @@
 //CHANGES2
 require("dotenv").config();
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const users = require("./users");
+const transactions = require("./transactions");
 const cors = require("cors");
 const mongoose = require("mongoose");
 // const journalController = require("./controllers/journalController.js");
@@ -67,8 +70,60 @@ app.use(express.json());
 // app.use("/daybits/register", usersController);
 // app.use("/daybits/comments", CommentsController);
 
+const verifyToken = (req, res, next) => {
+  //MIDDLEWARE to verify token
+  try {
+    const authToken = req.headers.token;
+
+    // validate the token
+    const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
+
+    // if valid, retrieve the username from the token
+    const username = decoded.user;
+
+    req.user = username;
+
+    next();
+  } catch (error) {
+    res.sendStatus(403);
+  }
+};
+
 app.get("/", (req, res) => {
   res.send("Hello WORLDDD");
+});
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body; //postman Body
+
+  if (users[username].password === password) {
+    //authenticate and create the jwt
+    const newToken = jwt.sign(
+      {
+        user: username, //token has key as user
+      },
+      process.env.TOKEN_SECRET,
+      { expiresIn: 60 * 60 }
+    );
+
+    res
+      .status(200)
+      .cookie("NewCookie", newToken, { path: "/", httpOnly: true })
+      .send("cookie");
+  } else {
+    res.status(403).send("unauthorised");
+  }
+});
+
+app.post("/posts", verifyToken, (req, res) => {
+  //verifyToken used here
+  const username = req.user;
+  const userTransactions = transactions[username];
+  res.status(200).json({ transactions: userTransactions });
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("NewCookie").send("cookie dead");
 });
 
 app.listen(PORT, () => {
