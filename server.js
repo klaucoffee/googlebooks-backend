@@ -3,12 +3,12 @@
 require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const users = require("./users");
+const users = require("./userstesting");
 const transactions = require("./transactions");
 const cors = require("cors");
 const mongoose = require("mongoose");
 // const journalController = require("./controllers/journalController.js");
-// const usersController = require("./controllers/UsersController.js");
+const UsersController = require("./controllers/UsersController.js");
 // const CommentsController = require("./controllers/CommentsController.js");
 
 const session = require("express-session");
@@ -69,67 +69,11 @@ app.use(express.json());
 
 //****************ROUTES***************//
 // app.use("/daybits/journal", journalController);
-// app.use("/daybits/register", usersController);
+app.use("/", UsersController);
 // app.use("/daybits/comments", CommentsController);
 
-const verifyToken = (req, res, next) => {
-  //MIDDLEWARE to verify token
-  console.log("COOKIE", req.headers.Cookie);
-  try {
-    const authToken = req.headers.token; //token is now in header. Token is the cookie value
-    //const authToken = req.headers.Cookie;
-
-    // validate the token
-    const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
-
-    // if valid, retrieve the username from the token
-    const username = decoded.user;
-
-    req.user = username;
-
-    next();
-  } catch (error) {
-    res.sendStatus(403);
-  }
-};
-
 app.get("/", (req, res) => {
-  res.send("Hello WORLDDD 2");
-});
-
-app.post("/login", (req, res) => {
-  const { username, password } = req.body; //postman Body
-  console.log("body", req.body);
-
-  if (users[username].password === password) {
-    //authenticate and create the jwt
-    const newToken = jwt.sign(
-      {
-        user: username, //token has key as user
-      },
-      process.env.TOKEN_SECRET,
-      { expiresIn: 60 * 60 }
-    );
-
-    res
-      .status(200)
-      .cookie("NewCookie", newToken, { path: "/", httpOnly: true })
-      .send("log in successful - cookie");
-  } else {
-    res.status(403).send("unauthorised");
-  }
-});
-
-app.post("/posts", verifyToken, (req, res) => {
-  //verifyToken used here
-  const username = req.user;
-
-  const userTransactions = transactions[username];
-  res.status(200).json({ transactions: userTransactions });
-});
-
-app.post("/logout", (req, res) => {
-  res.clearCookie("NewCookie").send("cookie dead");
+  res.send("Hello WORLDDD 3");
 });
 
 app.listen(PORT, () => {
