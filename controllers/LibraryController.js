@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     const authToken = getCookie("newCookie");
-    console.log("authtoken", authToken);
+    //console.log("authtoken", authToken);
     // validate the token
     const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
 
@@ -53,9 +53,9 @@ library.post("/", verifyToken, async (req, res) => {
     currentUser.library.push(newBookRecord);
     currentUser.save();
 
-    res.status(200).send("success");
+    res.status(200).json({ status: "success" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error });
   }
   // const userTransactions = transactions[username];
   //res.status(200).json({ status: "success" });
