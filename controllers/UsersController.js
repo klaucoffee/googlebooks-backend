@@ -40,26 +40,6 @@ users.post("/registration", async (req, res) => {
 });
 
 /////////////////////////LOGIN/////////////////////////
-const verifyToken = (req, res, next) => {
-  //MIDDLEWARE to verify token
-  console.log("COOKIE", req.headers.Cookie);
-  try {
-    const authToken = req.headers.token; //token is now in header. Token is the cookie value
-    //const authToken = req.headers.Cookie;
-
-    // validate the token
-    const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
-
-    // if valid, retrieve the username from the token
-    const username = decoded.user;
-
-    req.user = username;
-
-    next();
-  } catch (error) {
-    res.sendStatus(403);
-  }
-};
 
 users.post("/login", async (req, res) => {
   const { email, password } = req.body; //postman Body
@@ -77,10 +57,10 @@ users.post("/login", async (req, res) => {
       process.env.TOKEN_SECRET,
       { expiresIn: 60 * 60 }
     );
-
+    console.log("newtoken", newToken);
     res
       .status(200)
-      .cookie("NewCookie", newToken, { path: "/", httpOnly: true })
+      .cookie("newCookie", newToken, { path: "/", httpOnly: true })
       .send({ status: "success" });
   } else {
     res.status(403).send("unauthorised");

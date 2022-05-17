@@ -9,7 +9,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 // const journalController = require("./controllers/journalController.js");
 const UsersController = require("./controllers/UsersController.js");
-// const CommentsController = require("./controllers/CommentsController.js");
+const LibraryController = require("./controllers/LibraryController.js");
 
 const session = require("express-session");
 
@@ -70,7 +70,7 @@ app.use(express.json());
 //****************ROUTES***************//
 // app.use("/daybits/journal", journalController);
 app.use("/", UsersController);
-// app.use("/daybits/comments", CommentsController);
+app.use("/library", LibraryController);
 
 app.get("/", (req, res) => {
   res.send("Hello WORLDDD 3");
