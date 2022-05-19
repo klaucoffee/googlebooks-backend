@@ -3,18 +3,9 @@ const express = require("express");
 const users = express.Router();
 const Users = require("../models/Users.js");
 const jwt = require("jsonwebtoken");
+const Library = require("../models/Library.js");
 
 /////////////////////////REGISTER/////////////////////////
-//Index route. Receiving the data from the front-end when user registers.
-// users.get("/registration", (req, res) => {
-//   Users.find()
-//     .then((userInfo) => {
-//       res.json(userInfo);
-//     })
-//     .catch((err) => {
-//       res.json(err);
-//     });
-// });
 
 //Adds new users accounts to MongoDB.
 users.post("/registration", async (req, res) => {
@@ -27,7 +18,7 @@ users.post("/registration", async (req, res) => {
   );
   try {
     const createdUser = await Users.create(req.body);
-    console.log("created user is: ", createdUser);
+
     if (createdUser) {
       res.status(200).json({ status: "success" });
       return;
@@ -35,7 +26,6 @@ users.post("/registration", async (req, res) => {
     //res.redirect('/');
   } catch (err) {
     res.status(500).json({ status: "failed" });
-    console.log(err);
   }
 });
 
@@ -43,9 +33,8 @@ users.post("/registration", async (req, res) => {
 
 users.post("/login", async (req, res) => {
   const { email, password } = req.body; //postman Body
-  console.log("body", req.body);
+
   const user = await Users.findOne({ email });
-  console.log(user);
 
   if (!user) {
     res.json({ status: "error" });
@@ -57,7 +46,9 @@ users.post("/login", async (req, res) => {
       process.env.TOKEN_SECRET,
       { expiresIn: 60 * 60 }
     );
-    console.log("newtoken", newToken);
+
+    const userId = await Library.create({ userId: user._id });
+
     res
       .status(200)
       .cookie("newCookie", newToken, { path: "/", httpOnly: true })

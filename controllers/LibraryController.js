@@ -20,8 +20,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     const authToken = getCookie("newCookie");
-    //console.log("authtoken", authToken);
-    // validate the token
+
     const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
 
     //   if valid, retrieve the username from the token
@@ -37,28 +36,32 @@ const verifyToken = (req, res, next) => {
 
 library.post("/", verifyToken, async (req, res) => {
   const email = req.user;
-  console.log("req.user", req.user);
 
   const filter = { email: req.user };
-  //console.log('newjournalentry', req.body);
-  //console.log('user', req.session.user);
+
   try {
+    //finding currentUser by email
     const currentUser = await Users.findOne(filter);
+    const currentUserId = currentUser._id;
+    console.log("currentuserid", currentUserId);
 
-    const newBookRecord = await Library.create(req.body);
-    console.log("newbookrecord", newBookRecord);
-    console.log("currentuser", currentUser);
-    //newJournalEntry.save();
-
-    currentUser.library.push(newBookRecord);
-    currentUser.save();
+    const currentBook = await Library.create([
+      {
+        userId: currentUserId,
+        bookTitle: req.body.bookTitle,
+        bookAuthor: req.body.bookAuthor,
+        thumbnail: req.body.thumbnail,
+      },
+    ]);
 
     res.status(200).json({ status: "success" });
   } catch (error) {
     res.status(400).json({ error });
   }
-  // const userTransactions = transactions[username];
-  //res.status(200).json({ status: "success" });
+});
+
+library.get("/", verifyToken, (req, res) => {
+  //CODE
 });
 
 // library.post("/posts", verifyToken, (req, res) => {
