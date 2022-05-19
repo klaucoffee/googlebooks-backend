@@ -39,25 +39,14 @@ library.post("/", verifyToken, async (req, res) => {
 
   const filter = { email: req.user };
 
-  try {
-    //finding currentUser by email
-    const currentUser = await Users.findOne(filter);
-    const currentUserId = currentUser._id;
-    console.log("currentuserid", currentUserId);
-
-    const currentBook = await Library.create([
-      {
-        userId: currentUserId,
-        bookTitle: req.body.bookTitle,
-        bookAuthor: req.body.bookAuthor,
-        thumbnail: req.body.thumbnail,
-      },
-    ]);
-
-    res.status(200).json({ status: "success" });
-  } catch (error) {
-    res.status(400).json({ error });
-  }
+  Library.find(filter)
+    .then((savedBooks) => {
+      //console.log(journalDetails);
+      res.json(savedBooks);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 library.get("/", verifyToken, (req, res) => {
