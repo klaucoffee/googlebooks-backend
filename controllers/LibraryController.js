@@ -39,18 +39,41 @@ library.post("/", verifyToken, async (req, res) => {
 
   const filter = { email: req.user };
 
-  Library.find(filter)
-    .then((savedBooks) => {
-      //console.log(journalDetails);
-      res.json(savedBooks);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
+  try {
+    //finding currentUser by email
+    const currentUser = await Users.findOne(filter);
+    const currentUserId = currentUser._id;
+    console.log("currentuserid", currentUserId);
+
+    const currentBook = await Library.create([
+      {
+        userId: currentUserId,
+        bookTitle: req.body.bookTitle,
+        bookAuthor: req.body.bookAuthor,
+        thumbnail: req.body.thumbnail,
+      },
+    ]);
+
+    res.status(200).json({ status: "success" });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 });
 
-library.get("/", verifyToken, (req, res) => {
-  //CODE
+library.get("/", verifyToken, async (req, res) => {
+  const email = req.user;
+
+  const filter = { email: req.user };
+  const currentUser = await Users.findOne(filter);
+  const currentUserId = currentUser._id;
+  Library.find({ userId: currentUserId })
+    .then((books) => {
+      //console.log(books);
+      res.status(200).json(books);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
 // library.post("/posts", verifyToken, (req, res) => {
