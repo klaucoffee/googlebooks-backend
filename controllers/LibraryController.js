@@ -5,7 +5,7 @@ const Library = require("../models/Library.js");
 const Users = require("../models/Users.js");
 const jwt = require("jsonwebtoken");
 
-/////////////////////////LOGIN/////////////////////////
+/////////////////////////VERIFYTOKEN/////////////////////////
 const verifyToken = (req, res, next) => {
   //MIDDLEWARE to verify token
 
@@ -34,6 +34,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+////////////////////CREATE BOOK/////////////////////////
 library.post("/", verifyToken, async (req, res) => {
   const email = req.user;
 
@@ -60,6 +61,7 @@ library.post("/", verifyToken, async (req, res) => {
   }
 });
 
+////////////////////RETRIEVE BOOK/////////////////////////
 library.get("/", verifyToken, async (req, res) => {
   const email = req.user;
 
@@ -75,13 +77,5 @@ library.get("/", verifyToken, async (req, res) => {
       res.status(500).json(err);
     });
 });
-
-// library.post("/posts", verifyToken, (req, res) => {
-//   //verifyToken used here
-//   const username = req.user;
-
-//   const userTransactions = transactions[username];
-//   res.status(200).json({ transactions: userTransactions });
-// });
 
 module.exports = library;
