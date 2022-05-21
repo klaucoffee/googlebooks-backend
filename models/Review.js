@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const reviewSchema = mongoose.Schema({
+  userId: { type: String },
+  reviewId: { type: String },
+  bookTitle: { type: String },
   review: { type: String },
   createdOn: { type: String },
 });

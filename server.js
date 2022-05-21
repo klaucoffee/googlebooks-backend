@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 // const journalController = require("./controllers/journalController.js");
 const UsersController = require("./controllers/UsersController.js");
 const LibraryController = require("./controllers/LibraryController.js");
+const ReviewController = require("./controllers/ReviewController.js");
 
 const session = require("express-session");
 
@@ -71,6 +72,7 @@ app.use(express.json());
 // app.use("/daybits/journal", journalController);
 app.use("/", UsersController);
 app.use("/library", LibraryController);
+app.use("/review", ReviewController);
 
 app.get("/", (req, res) => {
   res.send("Hello WORLDDD 3");
