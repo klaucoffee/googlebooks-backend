@@ -45,8 +45,8 @@ review.post("/", verifyToken, async (req, res) => {
     //finding currentUser by email
     const currentUser = await Users.findOne(filter);
     const currentUserId = currentUser._id;
-    console.log("currentuserid", currentUserId);
-    console.log("reqbody", req.body);
+    // console.log("currentuserid", currentUserId);
+    // console.log("reqbody", req.body);
 
     const currentBook = await Review.create([
       {
@@ -79,21 +79,40 @@ review.post("/:id", verifyToken, async (req, res) => {
     });
 });
 
-///////////////////////GET BOOK IDS/////////////////////////
-// review.get("/", verifyToken, async (req, res) => {
-//   const email = req.user;
+///////////////////////GET REVIEWS/////////////////////////
+review.get("/", verifyToken, async (req, res) => {
+  const email = req.user;
 
-//   const filter = { email: req.user };
-//   const currentUser = await Users.findOne(filter);
-//   const currentUserId = currentUser._id;
-//   Review.find({ userId: currentUserId })
-//     .then((reviewId) => {
-//       console.log(reviewId);
-//       res.status(200).json(reviewId);
-//     })
-//     .catch((err) => {
-//       res.status(500).json(err);
-//     });
-// });
+  const filter = { email: req.user };
+  const currentUser = await Users.findOne(filter);
+  const currentUserId = currentUser._id;
+  Review.find({ userId: currentUserId })
+    .then((review) => {
+      res.status(200).json(review);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+///////////////////////DELETE/////////////////////////
+review.delete("/", verifyToken, async (req, res) => {
+  const email = req.user;
+  const filter = { email: req.user };
+  const currentUser = await Users.findOne(filter);
+  const title = JSON.stringify(req.body);
+  const title1 = title.slice(14, title.length - 2);
+
+  const currentUserId = currentUser._id;
+  const query = { userId: currentUserId, bookTitle: title1 };
+
+  Review.findOneAndDelete(query)
+    .then((data) => {
+      res.status(200).json({ status: "success" });
+    })
+    .catch((err) => {
+      res.status(500).json({ status: "failed" });
+    });
+});
 
 module.exports = review;
