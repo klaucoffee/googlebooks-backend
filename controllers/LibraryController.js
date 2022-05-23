@@ -78,4 +78,25 @@ library.get("/", verifyToken, async (req, res) => {
     });
 });
 
+///////////////////////DELETE/////////////////////////
+library.delete("/", verifyToken, async (req, res) => {
+  const email = req.user;
+  const filter = { email: req.user };
+  const currentUser = await Users.findOne(filter);
+  const title = JSON.stringify(req.body);
+  const title1 = title.slice(14, title.length - 2);
+  console.log(title1);
+
+  const currentUserId = currentUser._id;
+  const query = { userId: currentUserId, bookTitle: title1 };
+
+  Library.findOneAndDelete(query)
+    .then((data) => {
+      res.status(200).json({ status: "success" });
+    })
+    .catch((err) => {
+      res.status(500).json({ status: "failed" });
+    });
+});
+
 module.exports = library;
