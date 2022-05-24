@@ -50,7 +50,7 @@ users.post("/login", async (req, res) => {
     const userId = await Library.create({ userId: user._id });
 
     res
-      .cookie("newCookie", newToken, { httpOnly: true })
+      .cookie("newCookie", newToken)
       // .cookie("newCookie", newToken, { path: "/", httpOnly: true })
       .status(200)
       .json({ status: "success" });
