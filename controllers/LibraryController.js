@@ -6,39 +6,41 @@ const Users = require("../models/Users.js");
 const jwt = require("jsonwebtoken");
 
 /////////////////////////VERIFYTOKEN/////////////////////////
-const verifyToken = (req, res, next) => {
-  //MIDDLEWARE to verify token
+// const verifyToken = (req, res, next) => {
+//   //MIDDLEWARE to verify token
 
-  function getCookie(cookieName) {
-    let cookie = {};
-    req.headers.cookie.split(";").forEach(function (el) {
-      let [key, value] = el.split("=");
-      cookie[key.trim()] = value;
-    });
-    return cookie[cookieName];
-  }
+//   function getCookie(cookieName) {
+//     let cookie = {};
+//     req.headers.cookie.split(";").forEach(function (el) {
+//       let [key, value] = el.split("=");
+//       cookie[key.trim()] = value;
+//     });
+//     return cookie[cookieName];
+//   }
 
-  try {
-    const authToken = getCookie("newCookie");
+//   try {
+//     const authToken = getCookie("newCookie");
 
-    const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
+//     const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
 
-    //   if valid, retrieve the username from the token
-    const email = decoded.user;
+//     //   if valid, retrieve the username from the token
+//     const email = decoded.user;
 
-    req.user = email;
+//     req.user = email;
 
-    next();
-  } catch (error) {
-    res.sendStatus(403);
-  }
-};
+//     next();
+//   } catch (error) {
+//     res.sendStatus(403);
+//   }
+// };
 
 ////////////////////CREATE BOOK/////////////////////////
-library.post("/", verifyToken, async (req, res) => {
-  const email = req.user;
-
-  const filter = { email: req.user };
+library.post("/", async (req, res) => {
+  // const email = req.user;
+  //console.log("from lib post", req.session);
+  //WORKS WITHOUT JWT
+  const filter = { email: req.session.user };
+  //console.log("filter", filter);
 
   try {
     //finding currentUser by email
@@ -62,10 +64,11 @@ library.post("/", verifyToken, async (req, res) => {
 });
 
 ////////////////////RETRIEVE BOOK/////////////////////////
-library.get("/", verifyToken, async (req, res) => {
-  const email = req.user;
+library.get("/", async (req, res) => {
+  //const email = req.user;
 
-  const filter = { email: req.user };
+  //const filter = { email: req.user };
+  const filter = { email: req.session.user };
   const currentUser = await Users.findOne(filter);
   const currentUserId = currentUser._id;
   console.log("currentuser", currentUserId);
@@ -80,9 +83,9 @@ library.get("/", verifyToken, async (req, res) => {
 });
 
 ///////////////////////DELETE/////////////////////////
-library.delete("/", verifyToken, async (req, res) => {
-  const email = req.user;
-  const filter = { email: req.user };
+library.delete("/", async (req, res) => {
+  //const email = req.user;
+  const filter = { email: req.session.user };
   const currentUser = await Users.findOne(filter);
   const title = JSON.stringify(req.body);
   const title1 = title.slice(14, title.length - 2);

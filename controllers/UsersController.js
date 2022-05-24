@@ -39,18 +39,14 @@ users.post("/login", async (req, res) => {
   if (!user) {
     res.json({ status: "error" });
   } else if (bcrypt.compareSync(password, user.password)) {
-    const newToken = jwt.sign(
-      {
-        user: email, //token has key as user
-      },
-      process.env.TOKEN_SECRET,
-      { expiresIn: 60 * 60 }
-    );
+    req.session.user = user.email;
+    req.session.userId = user._id;
+    console.log("from home", req.session);
 
     const userId = await Library.create({ userId: user._id });
 
     res
-      .cookie("newCookie", newToken)
+      // .cookie("newCookie", newToken)
       // .cookie("newCookie", newToken, { path: "/", httpOnly: true })
       .status(200)
       .json({ status: "success" });
@@ -69,7 +65,8 @@ users.post("/login", async (req, res) => {
 // });
 
 users.post("/logout", (req, res) => {
-  res.clearCookie("NewCookie").send({ status: "success" });
+  req.session.destroy();
+  res.json({ status: "success" });
 });
 
 module.exports = users;

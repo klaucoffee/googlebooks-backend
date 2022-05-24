@@ -7,39 +7,39 @@ const Library = require("../models/Library.js");
 const Review = require("../models/Review.js");
 
 /////////////////////////VERIFYTOKEN/////////////////////////
-const verifyToken = (req, res, next) => {
-  //MIDDLEWARE to verify token
+// const verifyToken = (req, res, next) => {
+//   //MIDDLEWARE to verify token
 
-  function getCookie(cookieName) {
-    let cookie = {};
-    req.headers.cookie.split(";").forEach(function (el) {
-      let [key, value] = el.split("=");
-      cookie[key.trim()] = value;
-    });
-    return cookie[cookieName];
-  }
+//   function getCookie(cookieName) {
+//     let cookie = {};
+//     req.headers.cookie.split(";").forEach(function (el) {
+//       let [key, value] = el.split("=");
+//       cookie[key.trim()] = value;
+//     });
+//     return cookie[cookieName];
+//   }
 
-  try {
-    const authToken = getCookie("newCookie");
+//   try {
+//     const authToken = getCookie("newCookie");
 
-    const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
+//     const decoded = jwt.verify(authToken, process.env.TOKEN_SECRET);
 
-    //   if valid, retrieve the username from the token
-    const email = decoded.user;
+//     //   if valid, retrieve the username from the token
+//     const email = decoded.user;
 
-    req.user = email;
+//     req.user = email;
 
-    next();
-  } catch (error) {
-    res.sendStatus(403);
-  }
-};
+//     next();
+//   } catch (error) {
+//     res.sendStatus(403);
+//   }
+// };
 
 ///////////////////////Create Review Record//////////////////////
-review.post("/", verifyToken, async (req, res) => {
-  const email = req.user;
+review.post("/", async (req, res) => {
+  //const email = req.user;
 
-  const filter = { email: req.user };
+  const filter = { email: req.session.user };
 
   try {
     //finding currentUser by email
@@ -63,9 +63,8 @@ review.post("/", verifyToken, async (req, res) => {
 });
 
 //////////////////POST BOOK REVIEW BY ID/////////////////////////
-review.post("/:id", verifyToken, async (req, res) => {
-  const email = req.user;
-  const filter = { email: req.user };
+review.post("/:id", async (req, res) => {
+  const filter = { email: req.session.user };
   const currentUser = await Users.findOne(filter);
   const currentUserId = currentUser._id;
   const query = { userId: currentUserId, bookTitle: req.params.id };
@@ -80,10 +79,8 @@ review.post("/:id", verifyToken, async (req, res) => {
 });
 
 ///////////////////////GET REVIEWS/////////////////////////
-review.get("/", verifyToken, async (req, res) => {
-  const email = req.user;
-
-  const filter = { email: req.user };
+review.get("/", async (req, res) => {
+  const filter = { email: req.session.user };
   const currentUser = await Users.findOne(filter);
   const currentUserId = currentUser._id;
   Review.find({ userId: currentUserId })
@@ -96,9 +93,8 @@ review.get("/", verifyToken, async (req, res) => {
 });
 
 ///////////////////////DELETE/////////////////////////
-review.delete("/", verifyToken, async (req, res) => {
-  const email = req.user;
-  const filter = { email: req.user };
+review.delete("/", async (req, res) => {
+  const filter = { email: req.session.user };
   const currentUser = await Users.findOne(filter);
   const title = JSON.stringify(req.body);
   const title1 = title.slice(14, title.length - 2);

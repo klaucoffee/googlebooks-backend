@@ -2,7 +2,7 @@
 //CHANGES3
 require("dotenv").config();
 const express = require("express");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const users = require("./userstesting");
 const transactions = require("./transactions");
 const cors = require("cors");
@@ -36,27 +36,18 @@ mongoose.connection.once("open", () => {
 //****************MIDDLEWARES***************//
 app.set("trust proxy", 1); // add this line
 app.use(express.static("public")); //overwrites the path - access the public folder (works for static html file)
-// app.use(
-//   session({
-//     secret: process.env.SECRET,
-//     resave: false,
-//     saveUninitialized: true, //changed this to true
-//     // add the cookie stuff below
-//     cookie: {
-//       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-//       secure: process.env.NODE_ENV === "production",
-//     },
-//   })
-// );
-// app.use(
-// 	session({
-// 		secret: process.env.SECRET, //a random string do not copy this value or your stuff will get hacked
-// 		cookie: { httpOnly: false },
-// 		resave: false, // default more info: https://www.npmjs.com/package/express-session#resave
-// 		saveUninitialized: false, // default  more info: https://www.npmjs.com/package/express-session#resave
-// 	})
-// );
-// server.js cors setting
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false, //changed this to true
+    // add the cookie stuff below
+    cookie: {
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+    },
+  })
+);
 app.use(
   cors({
     credentials: true,
