@@ -50,9 +50,10 @@ users.post("/login", async (req, res) => {
     const userId = await Library.create({ userId: user._id });
 
     res
-      .status(200)
       .cookie("newCookie", newToken, { path: "/", httpOnly: true })
-      .json({ token: newToken });
+      .status(200)
+      .json({ status: "success" });
+    // .json({ token: newToken });
   } else {
     res.status(403).send("unauthorised");
   }
