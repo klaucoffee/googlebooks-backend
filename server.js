@@ -61,7 +61,7 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:3000",
-      "https://googlebooks-frontend.vercel.app/",
+      "https://googlebooks-frontend.vercel.app",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
