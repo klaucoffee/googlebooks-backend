@@ -44,19 +44,23 @@ review.post("/", async (req, res) => {
   try {
     //finding currentUser by email
     const currentUser = await Users.findOne(filter);
-    const currentUserId = currentUser._id;
-    // console.log("currentuserid", currentUserId);
-    // console.log("reqbody", req.body);
+    if (!currentUser) {
+      res.json({ status: "not logged in" });
+    } else {
+      const currentUserId = currentUser._id;
+      // console.log("currentuserid", currentUserId);
+      // console.log("reqbody", req.body);
 
-    const currentBook = await Review.create([
-      {
-        userId: currentUserId,
-        bookTitle: req.body.bookTitle,
-        createdOn: req.body.createdOn,
-      },
-    ]);
+      const currentBook = await Review.create([
+        {
+          userId: currentUserId,
+          bookTitle: req.body.bookTitle,
+          createdOn: req.body.createdOn,
+        },
+      ]);
 
-    res.status(200).json({ status: "success" });
+      res.status(200).json({ status: "success" });
+    }
   } catch (error) {
     res.status(400).json({ error });
   }

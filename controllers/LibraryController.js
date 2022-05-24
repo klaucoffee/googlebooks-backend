@@ -45,19 +45,24 @@ library.post("/", async (req, res) => {
   try {
     //finding currentUser by email
     const currentUser = await Users.findOne(filter);
-    const currentUserId = currentUser._id;
-    //console.log("currentuserid", currentUserId);
 
-    const currentBook = await Library.create([
-      {
-        userId: currentUserId,
-        bookTitle: req.body.bookTitle,
-        bookAuthor: req.body.bookAuthor,
-        thumbnail: req.body.thumbnail,
-      },
-    ]);
+    if (!currentUser) {
+      res.json({ status: "not logged in" });
+    } else {
+      const currentUserId = currentUser._id;
+      //console.log("currentuserid", currentUserId);
 
-    res.status(200).json({ status: "success" });
+      const currentBook = await Library.create([
+        {
+          userId: currentUserId,
+          bookTitle: req.body.bookTitle,
+          bookAuthor: req.body.bookAuthor,
+          thumbnail: req.body.thumbnail,
+        },
+      ]);
+
+      res.status(200).json({ status: "success" });
+    }
   } catch (error) {
     res.status(400).json({ error });
   }
