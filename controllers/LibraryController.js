@@ -44,7 +44,7 @@ library.post("/", verifyToken, async (req, res) => {
     //finding currentUser by email
     const currentUser = await Users.findOne(filter);
     const currentUserId = currentUser._id;
-    console.log("currentuserid", currentUserId);
+    //console.log("currentuserid", currentUserId);
 
     const currentBook = await Library.create([
       {
@@ -85,7 +85,7 @@ library.delete("/", verifyToken, async (req, res) => {
   const currentUser = await Users.findOne(filter);
   const title = JSON.stringify(req.body);
   const title1 = title.slice(14, title.length - 2);
-  console.log(title1);
+  //console.log(title1);
 
   const currentUserId = currentUser._id;
   const query = { userId: currentUserId, bookTitle: title1 };
