@@ -68,6 +68,7 @@ library.get("/", verifyToken, async (req, res) => {
   const filter = { email: req.user };
   const currentUser = await Users.findOne(filter);
   const currentUserId = currentUser._id;
+  console.log("currentuser", currentUserId);
   Library.find({ userId: currentUserId })
     .then((books) => {
       //console.log(books);

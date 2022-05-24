@@ -52,7 +52,7 @@ users.post("/login", async (req, res) => {
     res
       .status(200)
       .cookie("newCookie", newToken, { path: "/", httpOnly: true })
-      .send({ status: "success" });
+      .json({ token: newToken });
   } else {
     res.status(403).send("unauthorised");
   }
