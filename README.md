@@ -27,7 +27,7 @@ Link to webapp:
 
 - [Bootstrap](https://getbootstrap.com/)
 - [Dayjs](https://day.js.org/)
-- [Jotai] (https://jotai.org/) was used to pass the _login_ state to all the components in the frontend
+- [Jotai](https://jotai.org/) was used to pass the _login_ state to all the components in the frontend
 
 ## Possible future development areas:
 
@@ -36,17 +36,17 @@ Link to webapp:
 
 ## Installation instructions:
 
-1. git clone the [frontend](https://github.com/klaucoffee/googlebooks-frontend) and the [backend](https://github.com/klaucoffee/googlebooks-backend)
-2. npm install
+1. `git clone` the [frontend](https://github.com/klaucoffee/googlebooks-frontend) and the [backend](https://github.com/klaucoffee/googlebooks-backend)
+2. `npm install`
 
 ## The project is hosted on Github
 
-Frontend: [https://github.com/klaucoffee/googlebooks-frontend] (https://github.com/klaucoffee/googlebooks-frontend)
+Frontend: [https://github.com/klaucoffee/googlebooks-frontend](https://github.com/klaucoffee/googlebooks-frontend)
 
-Backend: [https://github.com/klaucoffee/googlebooks-backend] (https://github.com/klaucoffee/googlebooks-backend)
+Backend: [https://github.com/klaucoffee/googlebooks-backend](https://github.com/klaucoffee/googlebooks-backend)
 
 ## This app is deployed on:
 
 Frontend:[https://googlebooks-frontend-k.herokuapp.com/home](https://googlebooks-frontend-k.herokuapp.com/home)
 
-Backend: [https://googlebooks-backend-k.herokuapp.com/home] (https://googlebooks-backend-k.herokuapp.com/home)
+Backend: [https://googlebooks-backend-k.herokuapp.com/home](https://googlebooks-backend-k.herokuapp.com/home)
