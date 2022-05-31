@@ -15,13 +15,13 @@ Link to webapp:
 
 1. MERN stack (MongoDB, ExpressJS, ReactJS, NodeJS)
 2. Schema:
-   i. Users Model with authentication
-   ii. Library Model
-   iii. Review Model
+   - Users Model with authentication
+   - Library Model
+   - Review Model
 3. Includes all major CRUD functions
-   i. Users can create an account and login
-   ii. Users can save and delete books to their libraries
-   iii. Users can create, edit and delete their book reviews
+   - Users can create an account and login
+   - Users can save and delete books to their libraries
+   - Users can create, edit and delete their book reviews
 
 ## Other framewotk / tools used:
 
